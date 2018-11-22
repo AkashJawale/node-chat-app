@@ -9,9 +9,20 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
+
 app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New User connected');
+
+	socket.emit('newEmail', {
+		from: 'akash@gmail.com',
+		text: 'Hey, What is going on',
+		createAt: 123
+	});
+
+	socket.on('createEmail', (newEmail) => {
+		console.log('createEmail', newEmail);
+	});
 
 	socket.on('disconnect', () => {
 		console.log('User was disconnected');
@@ -21,4 +32,3 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
 	console.log(`Server is up on ${port}`);
 });
- 
